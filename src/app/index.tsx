@@ -8,7 +8,8 @@ export default function Page() {
   return (
     <FlatList
       data={meditations}
-      contentContainerClassName="gap-5 p-3 bg-white"
+      className="bg-white"
+      contentContainerClassName="gap-8 p-3"
       renderItem={({ item }) => <MeditationItem meditation={item} />}
     />
   );
