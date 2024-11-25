@@ -10,11 +10,20 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
+import audio from "../../../assets/meditations/audio1.mp3";
+import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 
 const MeditationDetails = () => {
+  const formatSeconds = (milliseconds: number) => {
+    const minutes = Math.floor(milliseconds / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
   const { id } = useLocalSearchParams();
   const meditation = meditations.find((m) => m.id === Number(id));
   const { top } = useSafeAreaInsets();
+  const player = useAudioPlayer(audio);
+  const status = useAudioPlayerStatus(player);
   if (!meditation)
     return <Text className="text-2xl"> Meditation not found!</Text>;
 
@@ -46,7 +55,12 @@ const MeditationDetails = () => {
       </View>
       {/* Play Pause button */}
       <View className=" items-center justify-center bg-zinc-800 self-center w-20 aspect-square rounded-full">
-        <FontAwesome6 name="pause" size={24} color="snow" />
+        <FontAwesome6
+          name={status.playing ? "pause" : "play"}
+          size={24}
+          color="snow"
+          onPress={() => (player.playing ? player.pause() : player.play())}
+        />
       </View>
 
       {/* Bottom part of screen */}
@@ -66,18 +80,20 @@ const MeditationDetails = () => {
         <View className="px-5">
           <Slider
             style={{ width: "100%", height: 40 }}
-            value={0.5}
+            value={status.currentTime / status.duration}
             minimumValue={0}
             maximumValue={1}
-            onSlidingComplete={(value) => console.log(value)}
+            onSlidingComplete={(value) =>
+              player.seekTo(value * status.duration)
+            }
             minimumTrackTintColor="#3a3937"
             maximumTrackTintColor="#3a393755"
             thumbTintColor="#3a3937"
           />
         </View>
         <View className="flex-row justify-between p-5">
-          <Text>03:00</Text>
-          <Text>11:23</Text>
+          <Text>{formatSeconds(status.currentTime)}</Text>
+          <Text>{formatSeconds(status.duration)}</Text>
         </View>
       </View>
     </SafeAreaView>
