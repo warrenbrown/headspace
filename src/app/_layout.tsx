@@ -11,6 +11,14 @@ const RootLayout = () => {
         name="index"
         options={{ title: "Meditations", headerTitleAlign: "center" }}
       />
+      <Stack.Screen
+        name="meditation/[id]"
+        options={{
+          title: "Details",
+          headerShown: false,
+          animation: "slide_from_bottom",
+        }}
+      />
     </Stack>
   );
 };
