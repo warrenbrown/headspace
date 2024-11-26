@@ -22,7 +22,9 @@ const MeditationDetails = () => {
   const { id } = useLocalSearchParams();
   const meditation = meditations.find((m) => m.id === Number(id));
   const { top } = useSafeAreaInsets();
-  const player = useAudioPlayer(audio);
+  const player = useAudioPlayer({
+    uri: "http://webaudioapi.com/samples/audio-tag/chrono.mp3",
+  });
   const status = useAudioPlayerStatus(player);
   if (!meditation)
     return <Text className="text-2xl"> Meditation not found!</Text>;
