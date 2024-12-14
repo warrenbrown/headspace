@@ -1,10 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
+import { meditations } from "@/data";
+import MeditationItem from "@/components/MeditationItem";
+
+const meditation = meditations[0];
 
 export default function Page() {
   return (
-    <View style={styles.container}>
-      <Text>Home Screen</Text>
-    </View>
+    <FlatList
+      data={meditations}
+      className="bg-white"
+      contentContainerClassName="gap-8 p-3"
+      renderItem={({ item }) => <MeditationItem meditation={item} />}
+    />
   );
 }
 
